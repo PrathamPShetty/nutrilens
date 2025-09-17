@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nutrilens/constants/size_conf.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.qr_code_scanner,
+                      Icons.camera_enhance_outlined,
                       size: AppSizes.iconXLarge,
                       color: theme.colorScheme.onPrimary,
                     ),
@@ -174,6 +175,9 @@ class _HomePageState extends State<HomePage> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is NutritionLoaded) {
                   final data = state.nutritionData;
+                  final healthText = data['healthBenefits'] is List
+                      ? (data['healthBenefits'] as List).join(', ')
+                      : data['healthBenefits']?.toString() ?? 'N/A';
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius:
@@ -216,7 +220,7 @@ class _HomePageState extends State<HomePage> {
 
                           SizedBox(height: AppSizes.spacingSmall),
                           Text("Health Benefits:"),
-                          Text(data['healthBenefits'] ?? "N/A"),
+                          Text("$healthText"),
 
                           SizedBox(height: AppSizes.spacingSmall),
 
@@ -297,12 +301,12 @@ class _HomePageState extends State<HomePage> {
               mainAxisSpacing: AppSizes.spacingMedium,
               crossAxisSpacing: AppSizes.spacingMedium,
               children: [
-                _buildServiceCard(Icons.restaurant_menu, "Diet Plans", theme),
-                _buildServiceCard(Icons.monitor_heart, "Nutrition Tracking", theme),
-                _buildServiceCard(Icons.history, "Meal History", theme),
-                _buildServiceCard(Icons.show_chart, "Progress", theme),
-                _buildServiceCard(Icons.qr_code_scanner, "Barcode Scanner", theme),
-                _buildServiceCard(Icons.more_horiz, "More", theme),
+                _buildServiceCard(Icons.restaurant_menu, "Diet Plans", theme, "/dietplan"),
+                _buildServiceCard(Icons.monitor_heart, "Nutrition Tracking", theme, "/nutritiontracking"),
+                _buildServiceCard(Icons.history, "Meal History", theme, "/mealhistory"),
+                _buildServiceCard(Icons.show_chart, "Progress", theme, "/progress"),
+                _buildServiceCard(Icons.qr_code_scanner, "Barcode Scanner", theme, "/barcodescanner"),
+                _buildServiceCard(Icons.more_horiz, "More", theme, "/more"),
               ],
             ),
           ],
@@ -312,7 +316,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // 🔹 Service Card Widget
-  Widget _buildServiceCard(IconData icon, String title, ThemeData theme) {
+  Widget _buildServiceCard(IconData icon, String title, ThemeData theme, String route) {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -328,7 +332,8 @@ class _HomePageState extends State<HomePage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
         onTap: () {
-          // TODO: Handle service action
+          context.push(route);  
+  // context.go(route); 
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

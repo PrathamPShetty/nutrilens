@@ -34,7 +34,10 @@ class NutritionCubit extends Cubit<NutritionState> {
   }
 
   Future<void> saveDeit() async {
-   await  SharedPrefHelper.saveNutritionData((state as NutritionLoaded).nutritionData);
+    final dbHelper = NutritionDatabaseHelper();
+    print("saving.........");
+    print((state as NutritionLoaded).nutritionData);
+    await dbHelper.saveNutritionData((state as NutritionLoaded).nutritionData);
     emit(NutritionEmpty());
   }
 }

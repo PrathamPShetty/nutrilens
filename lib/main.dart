@@ -8,6 +8,7 @@ import 'theme/app_theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'cubit/home/home_cubit.dart';
 import 'repo/gemini_api.dart';
+import 'cubit/diet/diet_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => NutritionCubit(GeminiApiRepository())),
+        BlocProvider(create: (_) => DietCubit(GeminiApiRepository())),
       ],
       child: BlocBuilder<ThemeCubit, AppTheme>(
         builder: (context, themeState) {
