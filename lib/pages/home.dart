@@ -268,9 +268,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 } else if (state is NutritionError) {
-                  return Text(
-                    state.error,
-                    style: const TextStyle(color: Colors.red),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: AppSizes.paddingMedium),
+                      Text(
+                        state.error,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ],
                   );
                 }
                 return const SizedBox();
